@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">BeReal Recap</string>
+    <string name="app_subtitle">Instagram Reels 9:16</string>
+
+    <!-- Top Bar actions -->
+    <string name="action_clear">Clear list</string>
+    <string name="action_scan">Scan DCIM/BeReal</string>
+    <string name="action_pick">Select photos</string>
+
+    <!-- Bottom Controls -->
+    <string name="duration_per_photo">Duration per photo:</string>
+    <string name="duration_seconds_format">%.1f s</string>
+    <string name="action_preview">Preview</string>
+    <string name="action_export">Export (%s s)</string>
+
+    <!-- Month Filter & Selection -->
+    <string name="filter_all">All (%d)</string>
+    <string name="selection_summary">%1$d of %2$d selected</string>
+    <string name="all_months">All months</string>
+    <string name="select_all">Select all</string>
+    <string name="deselect_all">Deselect</string>
+
+    <!-- Empty state -->
+    <string name="empty_title">No photos loaded</string>
+    <string name="empty_description">Tap below to scan your BeReals or pick photos manually.</string>
+    <string name="btn_scan_folder">Scan /sdcard/DCIM/BeReal</string>
+    <string name="btn_load_photos">Load photos</string>
+
+    <!-- Clear Dialog -->
+    <string name="dialog_clear_title">Clear loaded photos?</string>
+    <string name="dialog_clear_message">The current list will be emptied so you can load a new month or select other photos whenever you want.</string>
+    <string name="btn_clear">Clear</string>
+    <string name="btn_cancel">Cancel</string>
+
+    <!-- Export Dialog -->
+    <string name="exporting_title">Generating video...</string>
+    <string name="exporting_preparing">Preparing encoder...</string>
+    <string name="exporting_progress">Processing photo %1$d of %2$d (%3$d%%)</string>
+
+    <!-- Success Dialog -->
+    <string name="success_title">Video Ready!</string>
+    <string name="success_message">The 9:16 recap video has been saved to your gallery (Movies/BeRealRecap). You can now open or share it directly to Instagram.</string>
+    <string name="btn_open_share">Open / Share</string>
+    <string name="btn_close">Close</string>
+
+    <!-- Preview Modal -->
+    <string name="preview_speed">Playback speed:</string>
+    <string name="preview_speed_format">%1$.1f s / photo  (Total: %2$.1f s)</string>
+    <string name="btn_previous">Previous</string>
+    <string name="btn_next">Next</string>
+    <string name="btn_play">Play</string>
+    <string name="btn_pause">Pause</string>
+
+    <!-- Toasts & Notifications -->
+    <string name="toast_permission_needed">Media storage permission required</string>
+    <string name="toast_photos_selected">%d photos selected</string>
+    <string name="toast_bereals_found">%d BeReals found and sorted</string>
+    <string name="toast_list_cleared">List cleared</string>
+    <string name="toast_export_error">Error generating video: %s</string>
+</resources>

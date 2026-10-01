@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">BeReal Recap</string>
+    <string name="app_subtitle">Instagram Reels 9:16</string>
+
+    <!-- Top Bar actions -->
+    <string name="action_clear">Vider la liste</string>
+    <string name="action_scan">Analyser DCIM/BeReal</string>
+    <string name="action_pick">Sélectionner des photos</string>
+
+    <!-- Bottom Controls -->
+    <string name="duration_per_photo">Durée par photo :</string>
+    <string name="duration_seconds_format">%.1f s</string>
+    <string name="action_preview">Aperçu</string>
+    <string name="action_export">Exporter (%s s)</string>
+
+    <!-- Month Filter & Selection -->
+    <string name="filter_all">Toutes (%d)</string>
+    <string name="selection_summary">%1$d sur %2$d sélectionnées</string>
+    <string name="all_months">Tous les mois</string>
+    <string name="select_all">Tout sélectionner</string>
+    <string name="deselect_all">Tout désélectionner</string>
+
+    <!-- Empty state -->
+    <string name="empty_title">Aucune photo chargée</string>
+    <string name="empty_description">Appuyez ci-dessous pour analyser vos BeReals ou sélectionnez des photos manuellement.</string>
+    <string name="btn_scan_folder">Analyser /sdcard/DCIM/BeReal</string>
+    <string name="btn_load_photos">Charger des photos</string>
+
+    <!-- Clear Dialog -->
+    <string name="dialog_clear_title">Effacer les photos chargées ?</string>
+    <string name="dialog_clear_message">La liste actuelle sera vidée pour que vous puissiez charger un nouveau mois ou sélectionner d\'autres photos à tout moment.</string>
+    <string name="btn_clear">Effacer</string>
+    <string name="btn_cancel">Annuler</string>
+
+    <!-- Export Dialog -->
+    <string name="exporting_title">Génération de la vidéo…</string>
+    <string name="exporting_preparing">Préparation de l\'encodeur…</string>
+    <string name="exporting_progress">Traitement de la photo %1$d sur %2$d (%3$d%%)</string>
+
+    <!-- Success Dialog -->
+    <string name="success_title">Vidéo prête !</string>
+    <string name="success_message">La vidéo récapitulative au format 9:16 a été enregistrée dans votre galerie (Movies/BeRealRecap). Vous pouvez maintenant l\'ouvrir ou la partager directement sur Instagram.</string>
+    <string name="btn_open_share">Ouvrir / Partager</string>
+    <string name="btn_close">Fermer</string>
+
+    <!-- Preview Modal -->
+    <string name="preview_speed">Vitesse de lecture :</string>
+    <string name="preview_speed_format">%1$.1f s / photo  (Total : %2$.1f s)</string>
+    <string name="btn_previous">Précédent</string>
+    <string name="btn_next">Suivant</string>
+    <string name="btn_play">Lecture</string>
+    <string name="btn_pause">Pause</string>
+
+    <!-- Toasts & Notifications -->
+    <string name="toast_permission_needed">Autorisation d\'accès aux médias requise</string>
+    <string name="toast_photos_selected">%d photos sélectionnées</string>
+    <string name="toast_bereals_found">%d BeReals trouvés et triés</string>
+    <string name="toast_list_cleared">Liste vidée</string>
+    <string name="toast_export_error">Erreur lors de la génération de la vidéo : %s</string>
+</resources>
