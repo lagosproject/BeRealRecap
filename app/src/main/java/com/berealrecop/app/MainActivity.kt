@@ -1,6 +1,7 @@
 package com.berealrecop.app
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -8,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -28,8 +30,18 @@ import java.io.File
 
 class MainActivity : ComponentActivity() {
 
+    companion object {
+        private const val PREFS_NAME = "bereal_recap_prefs"
+        private const val KEY_DURATION = "duration_per_image"
+        private const val DEFAULT_DURATION = 0.8f
+    }
+
+    private val prefs by lazy {
+        getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    }
+
     private val itemsState = mutableStateListOf<BeRealItem>()
-    private var durationState by mutableFloatStateOf(0.8f)
+    private var durationState by mutableFloatStateOf(DEFAULT_DURATION)
     private var isExportingState by mutableStateOf(false)
     private var exportProgressState by mutableFloatStateOf(0f)
     private var exportProgressTextState by mutableStateOf("")
@@ -67,6 +79,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        durationState = prefs.getFloat(KEY_DURATION, DEFAULT_DURATION)
+
         setContent {
             BeRealRecopTheme {
                 HomeScreen(
@@ -76,7 +90,10 @@ class MainActivity : ComponentActivity() {
                     exportProgress = exportProgressState,
                     exportProgressText = exportProgressTextState,
                     exportedVideoUri = exportedVideoUriState,
-                    onDurationChange = { durationState = it },
+                    onDurationChange = { newDuration ->
+                        durationState = newDuration
+                        prefs.edit().putFloat(KEY_DURATION, newDuration).apply()
+                    },
                     onToggleItem = { item ->
                         val index = itemsState.indexOfFirst { it.id == item.id }
                         if (index != -1) {
@@ -147,7 +164,7 @@ class MainActivity : ComponentActivity() {
             if (targetDir != null) {
                 targetDir.listFiles { file ->
                     val name = file.name.lowercase()
-                    name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png")
+                    name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".webp")
                 }?.forEach { file ->
                     val uri = Uri.fromFile(file)
                     val item = BeRealParser.parseItem(
@@ -167,8 +184,16 @@ class MainActivity : ComponentActivity() {
                     MediaStore.Images.Media.DISPLAY_NAME,
                     MediaStore.Images.Media.DATA
                 )
-                val selection = "${MediaStore.Images.Media.DATA} LIKE ?"
-                val selectionArgs = arrayOf("%/BeReal/%")
+                val selection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    "${MediaStore.Images.Media.DATA} LIKE ? OR ${MediaStore.Images.Media.RELATIVE_PATH} LIKE ?"
+                } else {
+                    "${MediaStore.Images.Media.DATA} LIKE ?"
+                }
+                val selectionArgs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    arrayOf("%/BeReal/%", "%DCIM/BeReal/%")
+                } else {
+                    arrayOf("%/BeReal/%")
+                }
 
                 try {
                     contentResolver.query(
@@ -216,6 +241,7 @@ class MainActivity : ComponentActivity() {
     private fun startVideoExport(itemsToExport: List<BeRealItem> = itemsState) {
         if (isExportingState) return
         isExportingState = true
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         exportProgressState = 0f
         exportProgressTextState = getString(R.string.exporting_preparing)
 
@@ -240,6 +266,10 @@ class MainActivity : ComponentActivity() {
                 withContext(Dispatchers.Main) {
                     isExportingState = false
                     Toast.makeText(this@MainActivity, getString(R.string.toast_export_error, e.message ?: ""), Toast.LENGTH_LONG).show()
+                }
+            } finally {
+                withContext(Dispatchers.Main) {
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 }
             }
         }

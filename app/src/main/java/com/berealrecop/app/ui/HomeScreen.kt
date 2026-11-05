@@ -566,79 +566,37 @@ fun PreviewDialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Black)
         ) {
-            val currentItem = includedItems.getOrNull(currentIndex)
-
-            // Video Canvas Simulation (Exact 9:16 Aspect Ratio)
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .aspectRatio(9f / 16f, matchHeightConstraintsFirst = true)
-                    .align(Alignment.Center)
-                    .background(Color.Black)
-            ) {
-                if (currentItem != null) {
-                    // Photo centered vertically in 3:4 ratio inside 9:16 canvas
-                    AsyncImage(
-                        model = currentItem.filePath ?: currentItem.uri,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(3f / 4f)
-                            .align(Alignment.Center),
-                        contentScale = ContentScale.Fit
-                    )
-
-                    // Day Number rendered in top bar (exact simulation of exported video)
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight(0.125f) // 240 / 1920 = 12.5%
-                            .align(Alignment.TopCenter),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "${currentItem.dayNumber}",
-                            color = Color.White,
-                            fontSize = 38.sp,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-            }
-
             // Top Bar Overlay
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .statusBarsPadding()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .align(Alignment.TopCenter),
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
                     onClick = onDismiss,
-                    modifier = Modifier.background(Color.Black.copy(alpha = 0.5f), CircleShape)
+                    modifier = Modifier.background(Color.White.copy(alpha = 0.15f), CircleShape)
                 ) {
                     Icon(Icons.Default.Close, contentDescription = stringResource(R.string.btn_close), tint = Color.White)
                 }
 
                 Surface(
                     shape = RoundedCornerShape(16.dp),
-                    color = Color.Black.copy(alpha = 0.6f)
+                    color = Color.White.copy(alpha = 0.15f)
                 ) {
                     Text(
                         text = "${currentIndex + 1} / ${includedItems.size}",
                         color = Color.White,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 14.sp,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp)
                     )
                 }
 
@@ -648,23 +606,77 @@ fun PreviewDialog(
                     shape = RoundedCornerShape(12.dp),
                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp)
                 ) {
-                    Text(stringResource(R.string.action_preview).let { stringResource(R.string.action_clear).substringBefore(" ") }, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                    Icon(Icons.Default.Movie, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = stringResource(R.string.action_export, String.format(Locale.getDefault(), "%.1f", includedItems.size * durationPerImage)),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 13.sp
+                    )
                 }
             }
 
-            // Bottom Player Controls Overlay
+            // Video Canvas Simulation (Contained 9:16 Canvas, never clipped by screen or controls)
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 6.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                val currentItem = includedItems.getOrNull(currentIndex)
+                if (currentItem != null) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .aspectRatio(9f / 16f)
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(Color.Black)
+                            .border(1.dp, Color.White.copy(alpha = 0.25f), RoundedCornerShape(16.dp))
+                    ) {
+                        // Photo centered vertically in 3:4 ratio inside 9:16 canvas
+                        AsyncImage(
+                            model = currentItem.filePath ?: currentItem.uri,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(3f / 4f)
+                                .align(Alignment.Center),
+                            contentScale = ContentScale.Fit
+                        )
+
+                        // Day Number rendered in top bar (exact simulation of exported video)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight(0.125f) // 240 / 1920 = 12.5%
+                                .align(Alignment.TopCenter),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "${currentItem.dayNumber}",
+                                color = Color.White,
+                                fontSize = 34.sp,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+            }
+
+            // Bottom Player Controls
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
                     .navigationBarsPadding(),
-                color = Color.Black.copy(alpha = 0.88f),
+                color = Color.Black.copy(alpha = 0.92f),
                 shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp, vertical = 14.dp)
+                        .padding(horizontal = 20.dp, vertical = 12.dp)
                 ) {
                     // Playback progress bar
                     LinearProgressIndicator(
